@@ -1,11 +1,14 @@
 package ru.itpark;
+import ru.itpark.model.Manager;
 import ru.itpark.util.SQLHelper;
+
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         String url = "jdbc:sqlite:db.sqlite";
 
-        SQLHelper.executeQuery(
+        SQLHelper.executeUpdate(
                 url,
                 "INSERT INTO managers (boss_id, name, salary, plan, unit)\n" +
                         "VALUES " +
@@ -19,7 +22,7 @@ public class Main {
                     ps.setString(index, "boys");
                 });
 
-        SQLHelper.executeQuery(
+        SQLHelper.executeUpdate(
                 url,
                 "INSERT INTO managers (boss_id, name, salary, plan, unit)\n" +
                         "VALUES " +
@@ -32,5 +35,14 @@ public class Main {
                     ps.setInt(index++, 80);
                     ps.setString(index, "boys");
                 });
+
+        List<Manager> managers = SQLHelper.executeQuery(
+                url,
+                "SELECT id, boss_id, name, salary, plan, unit FROM managers WHERE boss_id = ?;",
+                ps -> ps.setInt(1, 1)
+        );
+        for (Manager manager : managers) {
+            System.out.println(manager);
+        }
     }
 }
