@@ -10,13 +10,13 @@ public class Main {
                 "INSERT INTO managers (boss_id, name, salary, plan, unit)\n" +
                         "VALUES " +
                         "(?, ?, ?, ?, ?);",
-                preparedStatement -> {
+                ps -> {
                     int index = 1;
-                    preparedStatement.setInt(index++, 1);
-                    preparedStatement.setString(index++, "Vasya");
-                    preparedStatement.setInt(index++, 100);
-                    preparedStatement.setInt(index++, 90);
-                    preparedStatement.setString(index, "boys");
+                    ps.setInt(index++, 1);
+                    ps.setString(index++, "Vasya");
+                    ps.setInt(index++, 100);
+                    ps.setInt(index++, 90);
+                    ps.setString(index, "boys");
                 });
 
         SQLHelper.executeQuery(
@@ -24,13 +24,13 @@ public class Main {
                 "INSERT INTO managers (boss_id, name, salary, plan, unit)\n" +
                         "VALUES " +
                         "(?, ?, ?, ?, ?);",
-                preparedStatement -> {
+                ps -> {
                     int index = 1;
-                    preparedStatement.setInt(index++, 1);
-                    preparedStatement.setString(index++, "Petya");
-                    preparedStatement.setInt(index++, 70);
-                    preparedStatement.setInt(index++, 80);
-                    preparedStatement.setString(index, "boys");
+                    ps.setInt(index++, 1);
+                    ps.setString(index++, "Petya");
+                    ps.setInt(index++, 70);
+                    ps.setInt(index++, 80);
+                    ps.setString(index, "boys");
                 });
     }
 }
