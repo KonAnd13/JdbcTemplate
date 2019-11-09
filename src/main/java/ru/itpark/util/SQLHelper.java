@@ -14,11 +14,10 @@ public class SQLHelper {
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
         ) {
             mapper.map(preparedStatement);
-            preparedStatement.executeUpdate();
+            return preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new DataAccesException();
         }
-        return -1;
     }
 
     public static List<Manager> executeQuery(String url, String sql, RowMapper mapper) {
