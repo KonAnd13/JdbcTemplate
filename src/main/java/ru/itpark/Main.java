@@ -39,7 +39,15 @@ public class Main {
         List<Manager> managers = SQLHelper.executeQuery(
                 url,
                 "SELECT id, boss_id, name, salary, plan, unit FROM managers WHERE boss_id = ?;",
-                ps -> ps.setInt(1, 1)
+                ps -> ps.setInt(1, 1),
+                rs -> new Manager(
+                        rs.getInt("id"),
+                        rs.getInt("boss_id"),
+                        rs.getString("name"),
+                        rs.getInt("salary"),
+                        rs.getInt("plan"),
+                        rs.getString("unit")
+                )
         );
         for (Manager manager : managers) {
             System.out.println(manager);

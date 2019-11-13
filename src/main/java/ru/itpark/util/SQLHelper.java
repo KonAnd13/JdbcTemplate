@@ -1,44 +1,38 @@
 package ru.itpark.util;
 
 import ru.itpark.exception.DataAccesException;
-import ru.itpark.model.Manager;
 
 import java.sql.*;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class SQLHelper {
-    public static int executeUpdate(String url, String sql, RowMapper mapper) {
+    public static int executeUpdate(String url, String sql, PreparedStatementSetter setter) {
         try (
                 Connection connection = DriverManager.getConnection(url);
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
         ) {
-            mapper.map(preparedStatement);
+            setter.set(preparedStatement);
             return preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new DataAccesException();
         }
     }
 
-    public static List<Manager> executeQuery(String url, String sql, RowMapper mapper) {
+
+    public static <T> List<T> executeQuery(String url, String sql, PreparedStatementSetter setter, RowMapper<T> mapper) {
         try (
                 Connection connection = DriverManager.getConnection(url);
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
         ) {
-            mapper.map(preparedStatement);
-            List<Manager> result = new ArrayList<>();
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                result.add(new Manager(
-                        resultSet.getInt("id"),
-                        resultSet.getInt("boss_id"),
-                        resultSet.getString("name"),
-                        resultSet.getInt("salary"),
-                        resultSet.getInt("plan"),
-                        resultSet.getString("unit")
-                ));
+            setter.set(preparedStatement);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                List<T> result = new LinkedList<>();
+                while (resultSet.next()) {
+                    result.add(mapper.map(resultSet));
+                }
+                return result;
             }
-            return result;
         } catch (SQLException e) {
             throw new DataAccesException();
         }
